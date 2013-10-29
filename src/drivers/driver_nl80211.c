@@ -2901,18 +2901,11 @@ static void nl80211_get_phy_name(struct wpa_driver_nl80211_data *drv)
 {
 	/* Find phy (radio) to which this interface belongs */
 	char buf[90], *pos;
-	int f = -1, rv;
-	int x = 0;
+	int f, rv;
 
 	drv->phyname[0] = '\0';
 	snprintf(buf, sizeof(buf) - 1, "/sys/class/net/%s/phy80211/name",
 		 drv->first_bss.ifname);
-	// Loop to wait for some slow drivers
-	while ((f < 0) && (x < 5)){
-		f = open(buf, O_RDONLY);
-		sleep(5);
-		x++;
-	}
 	f = open(buf, O_RDONLY);
 	if (f < 0) {
 		wpa_printf(MSG_DEBUG, "Could not open file %s: %s",
